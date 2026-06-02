@@ -17,10 +17,12 @@ const ProductPrice = ({
   className?: string
   forListing?: boolean
   plain?: boolean
-}) => {
+  }) => {
+  
   const { getCurrency } = useSettingStore()
   const currency = getCurrency()
   const t = useTranslations()
+
   const convertedPrice = round2(currency.convertRate * price)
   const convertedListPrice = round2(currency.convertRate * listPrice)
 
@@ -28,11 +30,12 @@ const ProductPrice = ({
   const discountPercent = Math.round(
     100 - (convertedPrice / convertedListPrice) * 100
   )
+
   const stringValue = convertedPrice.toString()
   const [intValue, floatValue] = stringValue.includes('.')
     ? stringValue.split('.')
     : [stringValue, '']
-
+  
   return plain ? (
     format.number(convertedPrice, {
       style: 'currency',
@@ -40,11 +43,11 @@ const ProductPrice = ({
       currencyDisplay: 'narrowSymbol',
     })
   ) : convertedListPrice == 0 ? (
-    <div className={cn('text-2xl', className)}>
+    <span className={cn('text-2xl', className)}>
       <span className='text-xs align-super'>{currency.symbol}</span>
       {intValue}
       <span className='text-xs align-super'>{floatValue}</span>
-    </div>
+    </span>
   ) : isDeal ? (
     <div className='space-y-2'>
       <div className='flex justify-center items-center gap-2'>
@@ -65,9 +68,9 @@ const ProductPrice = ({
         </div>
         <div className='text-muted-foreground text-ms py-2'>
           {t('Product.Was')}:{' جنية '}
-          <span className='line-through '>
+          <span className='line-through'>
             {format.number(convertedListPrice, {
-              // style: 'currency',
+              // style: 'جنية',
               currency: currency.code,
               currencyDisplay: 'narrowSymbol',
             })}

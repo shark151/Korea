@@ -14,6 +14,7 @@ import Product from '../db/models/product.model'
 import User from '../db/models/user.model'
 import mongoose from 'mongoose'
 import { getSetting } from './setting.actions'
+import { requireAdmin } from '@/lib/auth-guard'
 
 // CREATE
 export const createOrder = async (clientSideCart: Cart) => {
@@ -118,6 +119,7 @@ const updateProductStock = async (orderId: string) => {
 }
 export async function deliverOrder(orderId: string) {
   try {
+    await requireAdmin()
     await connectToDatabase()
     const order = await Order.findById(orderId).populate<{
       user: { email: string; name: string }
@@ -138,6 +140,11 @@ export async function deliverOrder(orderId: string) {
 // DELETE
 export async function deleteOrder(id: string) {
   try {
+    await requireAdmin()
+    const session = await auth()
+    if (!session || session.user.role !== 'Admin') {
+      throw new Error('Admin access required')
+    }
     await connectToDatabase()
     const res = await Order.findByIdAndDelete(id)
     if (!res) throw new Error('Order not found')
@@ -159,7 +166,8 @@ export async function getAllOrders({
 }: {
   limit?: number
   page: number
-}) {
+  }) {
+  await requireAdmin()
   const {
     common: { pageSize },
   } = await getSetting()
@@ -209,7 +217,25 @@ export async function getMyOrders({
 }
 export async function getOrderById(orderId: string): Promise<IOrder> {
   await connectToDatabase()
+  const session = await auth()
+
+  if (!session) {
+    throw new Error('Unauthorized')
+  }
+
   const order = await Order.findById(orderId)
+
+  if (!order) {
+    throw new Error('Order not found')
+  }
+
+  if (
+    order.user.toString() !== session.user.id &&
+    session.user.role !== 'Admin'
+  ) {
+    throw new Error('Access denied')
+  }
+
   return JSON.parse(JSON.stringify(order))
 }
 
@@ -325,6 +351,7 @@ export const calcDeliveryDateAndPrice = async ({
 
 // GET ORDERS BY USER
 export async function getOrderSummary(date: DateRange) {
+  await requireAdmin()
   await connectToDatabase()
 
   const ordersCount = await Order.countDocuments({

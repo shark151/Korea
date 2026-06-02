@@ -32,6 +32,7 @@ export default async function AdminUser(props: {
   const users = await getAllUsers({
     page,
   })
+  
   return (
     <div className='space-y-2'>
       <h1 className='h1-bold'>Users</h1>

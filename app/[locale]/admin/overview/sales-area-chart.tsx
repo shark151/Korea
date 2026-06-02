@@ -34,7 +34,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
       <Card>
         <CardContent className='p-2'>
           <p>{label && formatDateTime(new Date(label)).dateOnly}</p>
-          <p className='text-primary text-xl'>
+          <p className='text-primary text-sm'>
             <ProductPrice price={payload[0].value}  />
           </p>
         </CardContent>

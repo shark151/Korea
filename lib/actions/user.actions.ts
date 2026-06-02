@@ -36,6 +36,12 @@ export async function registerUser(userSignUp: IUserSignUp) {
 // DELETE
 
 export async function deleteUser(id: string) {
+  const session = await auth()
+
+  if (!session || session.user.role !== 'Admin') {
+  throw new Error('Admin access required')
+  }
+  
   try {
     await connectToDatabase()
     const res = await User.findByIdAndDelete(id)
@@ -52,6 +58,12 @@ export async function deleteUser(id: string) {
 // UPDATE
 
 export async function updateUser(user: z.infer<typeof UserUpdateSchema>) {
+  const session = await auth()
+
+if (!session || session.user.role !== 'Admin') {
+  throw new Error('Admin access required')
+}
+  
   try {
     await connectToDatabase()
     const dbUser = await User.findById(user._id)
@@ -75,6 +87,10 @@ export async function updateUserName(user: IUserName) {
     await connectToDatabase()
     const session = await auth()
     const currentUser = await User.findById(session?.user?.id)
+    
+    if (!session) {
+    throw new Error('Unauthorized')
+}
     if (!currentUser) throw new Error('User not found')
     currentUser.name = user.name
     const updatedUser = await currentUser.save()
@@ -106,7 +122,14 @@ export async function getAllUsers({
 }: {
   limit?: number
   page: number
-}) {
+  }) {
+  
+  const session = await auth()
+
+if (!session || session.user.role !== 'Admin') {
+  throw new Error('Admin access required')
+}
+  
   const {
     common: { pageSize },
   } = await getSetting()
@@ -126,6 +149,18 @@ export async function getAllUsers({
 }
 
 export async function getUserById(userId: string) {
+  const session = await auth()
+
+if (!session) {
+  throw new Error('Unauthorized')
+}
+
+if (
+  session.user.role !== 'Admin' &&
+  session.user.id !== userId
+) {
+  throw new Error('Access denied')
+}
   await connectToDatabase()
   const user = await User.findById(userId)
   if (!user) throw new Error('User not found')

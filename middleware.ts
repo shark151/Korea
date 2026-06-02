@@ -44,6 +44,12 @@ export default async function middleware(req: NextRequest) {
     return Response.redirect(newUrl)
   }
 
+  const isAdminRoute = req.nextUrl.pathname.includes('/admin')
+  
+  if (isAdminRoute && token?.role !== 'Admin') {
+    
+  return Response.redirect(new URL('/', req.url))
+  }
   return intlMiddleware(req)
 }
 

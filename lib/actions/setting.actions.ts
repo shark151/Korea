@@ -5,12 +5,15 @@ import Setting from '../db/models/setting.model'
 import { connectToDatabase } from '../db'
 import { formatError } from '../utils'
 import { cookies } from 'next/headers'
+import { requireAdmin } from '@/lib/auth-guard'
+
 
 const globalForSettings = global as unknown as {
   cachedSettings: ISettingInput | null
 }
 export const getNoCachedSetting = async (): Promise<ISettingInput> => {
   await connectToDatabase()
+
   const setting = await Setting.findOne()
   return JSON.parse(JSON.stringify(setting)) as ISettingInput
 }
@@ -29,6 +32,7 @@ export const getSetting = async (): Promise<ISettingInput> => {
 
 export const updateSetting = async (newSetting: ISettingInput) => {
   try {
+    await requireAdmin()
     await connectToDatabase()
     const updatedSetting = await Setting.findOneAndUpdate({}, newSetting, {
       upsert: true,

@@ -123,7 +123,7 @@ export default function OverviewReport() {
                 {formatNumber(data.ordersCount)}
               </div>
               <div>
-                <Link className='text-xm ' href='/admin/orders'>
+                <Link className='text-xm' href='/admin/orders'>
                   {t('View orders')}
                 </Link>
               </div>

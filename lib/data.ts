@@ -1841,7 +1841,7 @@ const data: Data = {
       })),
       defaultLanguage: 'en-US',
       availableCurrencies: [
-      { name: 'Egypt', code: 'EGP', symbol: 'جنية', convertRate: 1 },
+      { name: 'Egyptian Pound', code: 'EGP', symbol: 'جنية', convertRate: 1 },
         // {
         //   name: 'United States Dollar',
         //   code: 'USD',

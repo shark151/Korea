@@ -4,6 +4,7 @@ import ProductPrice from '@/components/shared/product/product-price'
 import { getMonthName } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 
 type TableChartProps = {
   labelType: 'month' | 'product'
@@ -15,7 +16,7 @@ type TableChartProps = {
   }[]
 }
 
-import React from 'react'
+
 
 interface ProgressBarProps {
   value: number // Accepts a number between 0 and 100
