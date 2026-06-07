@@ -151,7 +151,7 @@ export default function Footer() {
         </div>
       </div>
       <div className='p-4 bg-header'>
-        <div className='flex justify-center  gap-3 text-sm'>
+        <div className='flex justify-center  gap-3 text-2xl'>
           <Link href='/page/conditions-of-use'>
             {t('Footer.Conditions of Use')}
           </Link>
