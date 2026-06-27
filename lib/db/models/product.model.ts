@@ -18,6 +18,10 @@ const productSchema = new Schema<IProduct>(
       required: true,
       unique: true,
     },
+    keywords: {
+      type: [String],
+      default: [],
+    },
     category: {
       type: String,
       required: true,

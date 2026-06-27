@@ -250,15 +250,46 @@ export async function getAllProducts({
   } = await getSetting()
   limit = limit || pageSize
   await connectToDatabase()
+  const slugQuery = query.trim().replace(/\s+/g, '-')
+  const words = query.trim().split(/\s+/).filter(Boolean)
 
   const queryFilter =
     query && query !== 'all'
       ? {
-          name: {
-            $regex: query,
-            $options: 'i',
+        $or: [
+          {
+            name: {
+              $regex: words.join('|'),
+              $options: 'i',
+            },
           },
-        }
+          {
+            brand: {
+              $regex: words.join('|'),
+              $options: 'i',
+            },
+          },
+          {
+            category: {
+              $regex: words.join('|'),
+              $options: 'i',
+            },
+          },
+          
+          {
+            keywords: {
+              $in: words.map((w) => new RegExp(w, 'i')),
+            }
+          },
+
+          {
+            slug: {
+              $regex: slugQuery,
+              $options: 'i',
+            },
+          },
+        ]
+      }
       : {}
   const categoryFilter = category && category !== 'all' ? { category } : {}
   const tagFilter = tag && tag !== 'all' ? { tags: tag } : {}

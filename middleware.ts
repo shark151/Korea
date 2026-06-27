@@ -3,6 +3,7 @@ import { routing } from './i18n/routing'
 import { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
+
 const publicPages = [
   '/',
   '/search',

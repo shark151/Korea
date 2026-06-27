@@ -42,7 +42,9 @@ const productDefaultValues: IProductInput =
         avgRating: 0,
         numSales: 0,
         isPublished: false,
-        tags: [],
+      tags: [],
+      keywords: [],
+        
         // sizes: [],
         colors: [],
         ratingDistribution: [],
@@ -63,6 +65,7 @@ const productDefaultValues: IProductInput =
         numSales: 0,
         isPublished: false,
         tags: [],
+        keywords: [],
         // sizes: [],
         colors: [],
         ratingDistribution: [],
@@ -91,8 +94,12 @@ const ProductForm = ({
 
   const { toast } = useToast()
   async function onSubmit(values: IProductInput) {
+    const productData = {
+        ...values
+    }
+    
     if (type === 'Create') {
-      const res = await createProduct(values)
+      const res = await createProduct(productData)
       if (!res.success) {
         toast({
           variant: 'destructive',
@@ -110,7 +117,7 @@ const ProductForm = ({
         router.push(`/admin/products`)
         return
       }
-      const res = await updateProduct({ ...values, _id: productId })
+      const res = await updateProduct({ ...productData, _id: productId })
       if (!res.success) {
         toast({
           variant: 'destructive',
@@ -131,6 +138,7 @@ const ProductForm = ({
         className='space-y-8'
       >
         <div className='flex flex-col gap-5 md:flex-row'>
+          
           <FormField
             control={form.control}
             name='name'
@@ -254,6 +262,33 @@ const ProductForm = ({
         </div>
 
         <div className='flex flex-col gap-5 md:flex-row'>
+
+          <FormField
+            control={form.control}
+            name='keywords'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+          <FormLabel>Keywords</FormLabel>
+
+      <FormControl>
+        <Input
+          placeholder=' Enter Keywords '
+          value={field.value.join(' , ') || ''}
+          onChange={(e) =>
+            field.onChange(
+              e.target.value
+                .split(',')
+                // .map((k) => k.trim())
+                .filter(Boolean)
+            )
+          }
+        />
+      </FormControl>
+
+      <FormMessage />
+    </FormItem>
+  )}
+/>
           <FormField
             control={form.control}
             name='images'

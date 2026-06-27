@@ -58,6 +58,7 @@ function ProductList({
       const res = await fetch(
         `/api/products/browsing-history?type=${type}&excludeId=${excludeId}&categories=${categories}&ids=${ids}`
       )
+
       const data = await res.json()
       setData(data)
     }

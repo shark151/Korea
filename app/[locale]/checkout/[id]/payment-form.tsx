@@ -1,16 +1,16 @@
 'use client'
 
-import {
-  PayPalButtons,
-  PayPalScriptProvider,
-  usePayPalScriptReducer,
-} from '@paypal/react-paypal-js'
+// import {
+//   PayPalButtons,
+//   PayPalScriptProvider,
+//   usePayPalScriptReducer,
+// } from '@paypal/react-paypal-js'
 import { Card, CardContent } from '@/components/ui/card'
-import { useToast } from '@/hooks/use-toast'
-import {
-  approvePayPalOrder,
-  createPayPalOrder,
-} from '@/lib/actions/order.actions'
+// import { useToast } from '@/hooks/use-toast'
+// import {
+//   approvePayPalOrder,
+//   createPayPalOrder,
+// } from '@/lib/actions/order.actions'
 import { IOrder } from '@/lib/db/models/order.model'
 import { formatDateTime } from '@/lib/utils'
 
@@ -28,7 +28,7 @@ import { useTranslations } from 'next-intl'
 // )
 export default function OrderDetailsForm({
   order,
-  paypalClientId,
+  // paypalClientId,
   // clientSecret,
 }: {
   order: IOrder
@@ -48,37 +48,37 @@ export default function OrderDetailsForm({
     expectedDeliveryDate,
     isPaid,
   } = order
-  const { toast } = useToast()
+  // const { toast } = useToast()
   const t = useTranslations('Checkout')
   if (isPaid) {
     redirect(`/account/orders/${order._id}`)
   }
-  function PrintLoadingState() {
-    const [{ isPending, isRejected }] = usePayPalScriptReducer()
-    let status = ''
-    if (isPending) {
-      status = 'Loading PayPal...'
-    } else if (isRejected) {
-      status = 'Error in loading PayPal.'
-    }
-    return status
-  }
-  const handleCreatePayPalOrder = async () => {
-    const res = await createPayPalOrder(order._id)
-    if (!res.success)
-      return toast({
-        description: res.message,
-        variant: 'destructive',
-      })
-    return res.data
-  }
-  const handleApprovePayPalOrder = async (data: { orderID: string }) => {
-    const res = await approvePayPalOrder(order._id, data)
-    toast({
-      description: res.message,
-      variant: res.success ? 'default' : 'destructive',
-    })
-  }
+  // function PrintLoadingState() {
+  //   const [{ isPending, isRejected }] = usePayPalScriptReducer()
+  //   let status = ''
+  //   if (isPending) {
+  //     status = 'Loading PayPal...'
+  //   } else if (isRejected) {
+  //     status = 'Error in loading PayPal.'
+  //   }
+  //   return status
+  // }
+  // const handleCreatePayPalOrder = async () => {
+  //   const res = await createPayPalOrder(order._id)
+  //   if (!res.success)
+  //     return toast({
+  //       description: res.message,
+  //       variant: 'destructive',
+  //     })
+  //   return res.data
+  // }
+  // const handleApprovePayPalOrder = async (data: { orderID: string }) => {
+  //   const res = await approvePayPalOrder(order._id, data)
+  //   toast({
+  //     description: res.message,
+  //     variant: res.success ? 'default' : 'destructive',
+  //   })
+  // }
 
   const CheckoutSummary = () => (
     <Card>
@@ -123,7 +123,7 @@ export default function OrderDetailsForm({
               </span>
             </div>
 
-            {!isPaid && paymentMethod === 'PayPal' && (
+            {/* {!isPaid && paymentMethod === 'PayPal' && (
               <div>
                 <PayPalScriptProvider options={{ clientId: paypalClientId }}>
                   <PrintLoadingState />
@@ -133,7 +133,7 @@ export default function OrderDetailsForm({
                   />
                 </PayPalScriptProvider>
               </div>
-            )}
+            )} */}
             {!isPaid && paymentMethod === 'Mobile Wallets' &&  (
               <Button
                 className='w-full rounded-full'
